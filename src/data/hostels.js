@@ -48,8 +48,42 @@ const sharedFacilities = [
   },
 ];
 
-function hecEntry(role, name, email, phone) {
+function person(role, name, email, phone) {
   return { role, name, email, phone };
+}
+
+function details(value, fallbackName, email, phone) {
+  if (typeof value === "string" || value == null) {
+    return { name: value || fallbackName, email, phone };
+  }
+  return {
+    name: value.name || fallbackName,
+    email: value.email || email,
+    phone: value.phone || phone,
+  };
+}
+
+function hallTeam({ email, phone, supervisor, attendant = "Hall attendant", secretary = "VACANT", names = {}, posts = {} }) {
+  const student = (role) => {
+    const named = names[role] ? { name: names[role] } : undefined;
+    const chosen = details(posts[role] || named, secretary, email, phone);
+    return person(role, chosen.name, chosen.email, chosen.phone);
+  };
+  const supervisorDetails = details(supervisor, "Supervisor", email, phone);
+  const attendantDetails = details(attendant, "Hall attendant", email, phone);
+  return {
+    horc: [
+      student("Hall Secretary"),
+      student("Sports Secretary"),
+      student("Cultural Secretary"),
+      student("SnT Secretary"),
+      student("Dining Secretary"),
+    ],
+    desk: [
+      person("Supervisor", supervisorDetails.name, supervisorDetails.email, supervisorDetails.phone),
+      person("Attendant", attendantDetails.name, attendantDetails.email, attendantDetails.phone),
+    ],
+  };
 }
 
 export const hostels = [
@@ -61,7 +95,7 @@ export const hostels = [
     tagline: "Centrally air-cooled · Shared rooms",
     audience: "Students",
     capacity: "574 rooms",
-    image: photos.modern,
+    image: { src: "/hostels/apj.jpeg", alt: "A.P.J. Abdul Kalam Hall of Residence" },
     gallery: [photos.modern, photos.room, photos.study, photos.campus],
     warden: {
       name: "Dr. Sivaraj Mohana Sundaram",
@@ -82,12 +116,19 @@ export const hostels = [
       },
       ...sharedFacilities,
     ],
-    hec: [
-      hecEntry("Warden", "Dr. Sivaraj Mohana Sundaram", "warden.apj@iiti.ac.in", "0731-6605122"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.apj@iiti.ac.in", "0731-6603149"),
-      hecEntry("Caretaker", "Mr. Prashant Pahare", "office.apj@iiti.ac.in", "0731-6603149"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.apj@iiti.ac.in", "0731-6603149"),
-    ],
+    ...hallTeam({
+      email: "office.apj@iiti.ac.in",
+      phone: "0731-6603149",
+      supervisor: { name: "Mr. Prashant Pahare", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+      attendant: { name: "Himmat Singh", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+      posts: {
+        "Hall Secretary": { name: "Vacant", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "Sports Secretary": { name: "Vacant", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "Cultural Secretary": { name: "DHANUKA SAMARTH RUPESH", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "SnT Secretary": { name: "KATAMMAGARI MANAS JOEL", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "Dining Secretary": { name: "CHINTALA SASIDHAR", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+      },
+    }),
     notices: [
       {
         date: "18 Aug 2026",
@@ -123,7 +164,7 @@ export const hostels = [
     tagline: "Shared rooms · 574 capacity",
     audience: "Students",
     capacity: "574 rooms",
-    image: photos.campus,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.campus, photos.walkway, photos.friends, photos.library],
     warden: {
       name: "Dr. Sansuma Brahma",
@@ -137,12 +178,19 @@ export const hostels = [
       "Dr. Sansuma Brahma is the warden. Day-to-day desk work sits with the junior assistant at the hall office. Residents use the same central mess, campus Wi-Fi, and security cover as the other halls.",
     ],
     facilities: sharedFacilities,
-    hec: [
-      hecEntry("Warden", "Dr. Sansuma Brahma", "warden.vsb@iiti.ac.in", "0731-6605576"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.vsb@iiti.ac.in", "0731-6603455"),
-      hecEntry("Caretaker", "Mr. Subham Yadav", "office.vsb@iiti.ac.in", "0731-6603455"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.vsb@iiti.ac.in", "0731-6603455"),
-    ],
+    ...hallTeam({
+      email: "office.vsb@iiti.ac.in",
+      phone: "0731-6603455",
+      supervisor: { name: "Mr. Subham Yadav", email: "office.vsb@iiti.ac.in", phone: "0731-6603455" },
+      attendant: { name: "Hall attendant", email: "office.vsb@iiti.ac.in", phone: "0731-6603455" },
+      posts: {
+        "Hall Secretary": { name: "Vacant", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "Sports Secretary": { name: "Vacant", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "Cultural Secretary": { name: "DHANUKA SAMARTH RUPESH", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "SnT Secretary": { name: "KATAMMAGARI MANAS JOEL", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+        "Dining Secretary": { name: "CHINTALA SASIDHAR", email: "office.apj@iiti.ac.in", phone: "0731-6603149" },
+      },
+    }),
     notices: [
       {
         date: "21 Aug 2026",
@@ -178,7 +226,7 @@ export const hostels = [
     tagline: "Shared rooms · 574 capacity",
     audience: "Students",
     capacity: "574 rooms",
-    image: photos.columns,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.columns, photos.books, photos.gathering, photos.field],
     warden: {
       name: "Dr. Ayan Mondal",
@@ -192,12 +240,19 @@ export const hostels = [
       "The warden is Dr. Ayan Mondal. The hall office on extension 3447 is the first stop for maintenance, leave papers, and guest entries. Meals are at the Central Dining Hall, not in a separate mess inside the block.",
     ],
     facilities: sharedFacilities,
-    hec: [
-      hecEntry("Warden", "Dr. Ayan Mondal", "warden.hjb@iiti.ac.in", "0731-6603279"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.hjb@iiti.ac.in", "0731-6603447"),
-      hecEntry("Caretaker", "Mr. Mahesh Kumar Sahu", "office.hjb@iiti.ac.in", "0731-6603447"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.hjb@iiti.ac.in", "0731-6603447"),
-    ],
+    ...hallTeam({
+      email: "office.hjb@iiti.ac.in",
+      phone: "0731-6603447",
+      supervisor: { name: "Mr. Mahesh Kumar Sahu", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+      attendant: { name: "Hall attendant", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+      posts: {
+        "Hall Secretary": { name: "Apurv Anand", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+        "Sports Secretary": { name: "Tushar", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+        "Cultural Secretary": { name: "Gaurav Tiwari", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+        "SnT Secretary": { name: "VACANT", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+        "Dining Secretary": { name: "Gaurav Rajput", email: "office.hjb@iiti.ac.in", phone: "0731-6603447" },
+      },
+    }),
     notices: [
       {
         date: "16 Aug 2026",
@@ -233,7 +288,7 @@ export const hostels = [
     tagline: "Shared rooms · 574 capacity",
     audience: "Students",
     capacity: "574 rooms",
-    image: photos.library,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.library, photos.books, photos.study, photos.walkway],
     warden: {
       name: "Dr. Akshay Pratap Singh",
@@ -247,12 +302,19 @@ export const hostels = [
       "Dr. Akshay Pratap Singh is the warden. Like the other student halls, CVR has furnished rooms, common-room reading material, laundry, indoor games, and round-the-clock security.",
     ],
     facilities: sharedFacilities,
-    hec: [
-      hecEntry("Warden", "Dr. Akshay Pratap Singh", "warden.cvr@iiti.ac.in", "0731-6605171"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.cvr@iiti.ac.in", "0731-6603454"),
-      hecEntry("Caretaker", "Mr. Subham Yadav", "office.cvr@iiti.ac.in", "0731-6603454"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.cvr@iiti.ac.in", "0731-6603454"),
-    ],
+    ...hallTeam({
+      email: "office.cvr@iiti.ac.in",
+      phone: "0731-6603454",
+      supervisor: { name: "Mr. Subham Yadav", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+      attendant: { name: "Hall attendant", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+      posts: {
+        "Hall Secretary": { name: "KAMBLE SUYASH SHAMRAO", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+        "Sports Secretary": { name: "ABHIJEET", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+        "Cultural Secretary": { name: "JAMBULA PRANAV REDDY", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+        "SnT Secretary": { name: "Vacant", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+        "Dining Secretary": { name: "ABHISHEK BAIRWA", email: "office.cvr@iiti.ac.in", phone: "0731-6603454" },
+      },
+    }),
     notices: [
       {
         date: "11 Aug 2026",
@@ -288,12 +350,17 @@ export const hostels = [
     tagline: "Women residents · 574 rooms",
     audience: "Women students",
     capacity: "574 rooms",
-    image: photos.garden,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.garden, photos.friends, photos.study, photos.columns],
     warden: {
       name: "Dr. Aratrika Das",
       email: "warden.da@iiti.ac.in",
       phone: "0731-6603528",
+    },
+    associateWarden: {
+      name: "Dr. Srashtasrita Das",
+      email: "awarden.da@iiti.ac.in",
+      phone: "0731-6603333 ext. 5283",
     },
     officeEmail: "office.da@iiti.ac.in",
     officePhone: "0731-6603450",
@@ -309,12 +376,19 @@ export const hostels = [
       },
       ...sharedFacilities.filter((item) => item.icon !== "shield"),
     ],
-    hec: [
-      hecEntry("Warden", "Dr. Aratrika Das", "warden.da@iiti.ac.in", "0731-6603528"),
-      hecEntry("Associate Warden", "Dr. Srashtasrita Das", "awarden.da@iiti.ac.in", "0731-6603333 ext. 5283"),
-      hecEntry("Caretaker", "Ms. Tanishka Sikarwar", "office.da@iiti.ac.in", "0731-6603450"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.da@iiti.ac.in", "0731-6603450"),
-    ],
+    ...hallTeam({
+      email: "office.da@iiti.ac.in",
+      phone: "0731-6603450",
+      supervisor: { name: "Ms. Tanishka Sikarwar", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+      attendant: { name: "Hall attendant", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+      posts: {
+        "Hall Secretary": { name: "VACANT", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+        "Sports Secretary": { name: "VACANT", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+        "Cultural Secretary": { name: "VACANT", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+        "SnT Secretary": { name: "VACANT", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+        "Dining Secretary": { name: "Shraddha Gulbake", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+      },
+    }),
     notices: [
       {
         date: "19 Aug 2026",
@@ -350,12 +424,17 @@ export const hostels = [
     tagline: "Women residents · DA extension",
     audience: "Women students",
     capacity: "Extension of DA Hall",
-    image: photos.residence,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.residence, photos.garden, photos.room, photos.friends],
     warden: {
       name: "Dr. Aratrika Das",
       email: "warden.da@iiti.ac.in",
       phone: "0731-6603528",
+    },
+    associateWarden: {
+      name: "Dr. Srashtasrita Das",
+      email: "awarden.da@iiti.ac.in",
+      phone: "0731-6603333 ext. 5283",
     },
     officeEmail: "office.da@iiti.ac.in",
     officePhone: "0731-6603450",
@@ -371,12 +450,19 @@ export const hostels = [
       },
       ...sharedFacilities.filter((item) => item.icon !== "shield"),
     ],
-    hec: [
-      hecEntry("Warden", "Dr. Aratrika Das (additional charge)", "warden.da@iiti.ac.in", "0731-6603528"),
-      hecEntry("Associate Warden", "Dr. Srashtasrita Das", "awarden.da@iiti.ac.in", "0731-6603333 ext. 5283"),
-      hecEntry("Caretaker", "Ms. Tanishka Sikarwar", "office.da@iiti.ac.in", "0731-6603450"),
-      hecEntry("Hall Secretary", "Elected with Devi Ahilya Hall", "office.da@iiti.ac.in", "0731-6603450"),
-    ],
+    ...hallTeam({
+      email: "office.da@iiti.ac.in",
+      phone: "0731-6603450",
+      supervisor: { name: "Ms. Tanishka Sikarwar", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+      attendant: { name: "Hall attendant", email: "office.da@iiti.ac.in", phone: "0731-6603450" },
+      posts: {
+        "Hall Secretary": { name: "BOKKI SARAYU", email: "hallsecy.dae@iiti.ac.in", phone: "0731-6603450" },
+        "Sports Secretary": { name: "AVULA SHLOKA", email: "sportssecy.dae@iiti.ac.in", phone: "0731-6603450" },
+        "Cultural Secretary": { name: "VACANT", email: "cultsecy.dae@iiti.ac.in", phone: "0731-6603450" },
+        "SnT Secretary": { name: "SIDDHI LABDHA PADHI", email: "scitechsecy.dae@iiti.ac.in", phone: "0731-6603450" },
+        "Dining Secretary": { name: "DANDU PRATHIBHA JASMINE", email: "diningsecy.dae@iiti.ac.in", phone: "0731-6603450" },
+      },
+    }),
     notices: [
       {
         date: "14 Aug 2026",
@@ -412,7 +498,7 @@ export const hostels = [
     tagline: "Shared rooms · 264 rooms",
     audience: "Students",
     capacity: "264 rooms",
-    image: photos.walkway,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.walkway, photos.residence, photos.study, photos.dining],
     warden: {
       name: "Dr. Sansuma Brahma",
@@ -426,12 +512,19 @@ export const hostels = [
       "Residents have the standard furnished room, Wi-Fi, common room, laundry, and security cover. Food is served at the Central Dining Hall, which can seat the campus at scale and also houses kiosks for everyday needs.",
     ],
     facilities: sharedFacilities,
-    hec: [
-      hecEntry("Warden", "Dr. Sansuma Brahma", "warden.pmajay@iiti.ac.in", "0731-6605576"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.pmajay@iiti.ac.in", "0731-6605271"),
-      hecEntry("Caretaker", "Mr. Aman Jain", "office.pmajay@iiti.ac.in", "0731-6605271"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.pmajay@iiti.ac.in", "0731-6605271"),
-    ],
+    ...hallTeam({
+      email: "office.pmajay@iiti.ac.in",
+      phone: "0731-6605271",
+      supervisor: { name: "Mr. Aman Jain", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+      attendant: { name: "Hall attendant", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+      posts: {
+        "Hall Secretary": { name: "Tushar Kanta Nanda", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+        "Sports Secretary": { name: "Om Narayan", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+        "Cultural Secretary": { name: "VACANT", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+        "SnT Secretary": { name: "VACANT", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+        "Dining Secretary": { name: "VACANT", email: "office.pmajay@iiti.ac.in", phone: "0731-6605271" },
+      },
+    }),
     notices: [
       {
         date: "09 Aug 2026",
@@ -467,7 +560,7 @@ export const hostels = [
     tagline: "New hall · Large capacity",
     audience: "Students",
     capacity: "732",
-    image: photos.residence,
+    image: { src: "/hostels/bh07.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.residence, photos.modern, photos.field, photos.gym],
     warden: {
       name: "Dr. Subhadeep Paladhi",
@@ -481,12 +574,19 @@ export const hostels = [
       "The hall office on 0731-6605351 is the first point of contact. Rooms follow the institute standard — sharing, basic furniture, Wi-Fi, and security — and residents join the rest of the campus at the Central Dining Hall.",
     ],
     facilities: sharedFacilities,
-    hec: [
-      hecEntry("Warden", "Dr. Subhadeep Paladhi", "warden.bh07@iiti.ac.in", "0731-6603307"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.bh07@iiti.ac.in", "0731-6605351"),
-      hecEntry("Caretaker", "BH-07 Hall Office", "office.bh07@iiti.ac.in", "0731-6605351"),
-      hecEntry("Hall Secretary", "Elected by the residents", "office.bh07@iiti.ac.in", "0731-6605351"),
-    ],
+    ...hallTeam({
+      email: "office.bh07@iiti.ac.in",
+      phone: "0731-6605351",
+      supervisor: { name: "Aman Jain", email: "office.bh07@iiti.ac.in", phone: "0731-6605351" },
+      attendant: { name: "Vijay Pawar", email: "office.bh07@iiti.ac.in", phone: "0731-6605351" },
+      posts: {
+        "Hall Secretary": { name: "JAYDEEP SINGH SIKARWAR", email: "hallsecy.bh07@iiti.ac.in", phone: "0731-6605351" },
+        "Sports Secretary": { name: "SHAURYA PRATAP", email: "sportssecy.bh07@iiti.ac.in", phone: "0731-6605351" },
+        "Cultural Secretary": { name: "ANWAY ANURAG TEWARY", email: "cultsecy.bh07@iiti.ac.in", phone: "0731-6605351" },
+        "SnT Secretary": { name: "PUSHKAR SONI", email: "scitechsecy.bh07@iiti.ac.in", phone: "0731-6605351" },
+        "Dining Secretary": { name: "PALASH PRAKASH SHAHARE", email: "diningsecy.bh07@iiti.ac.in", phone: "0731-6605351" },
+      },
+    }),
     notices: [
       {
         date: "20 Aug 2026",
@@ -522,7 +622,7 @@ export const hostels = [
     tagline: "Married scholars & staff · Apartments",
     audience: "Married students and staff",
     capacity: "Single-room apartments",
-    image: photos.apartment,
+    image: { src: "/hostels/apj.jpeg", alt: "VSB: Vikram Sarabhai Hall of Residence" },
     gallery: [photos.apartment, photos.garden, photos.residence, photos.dining],
     warden: {
       name: "Dr. Sourav Chandra",
@@ -567,12 +667,19 @@ export const hostels = [
         detail: "Campus gymnasium and sports fields are shared with the other halls.",
       },
     ],
-    hec: [
-      hecEntry("Warden", "Dr. Sourav Chandra", "warden.jcb@iiti.ac.in", "0731-6605159"),
-      hecEntry("Associate Warden", "Announced by the Hall Office each session", "office.jcb@iiti.ac.in", "0731-6605315"),
-      hecEntry("Caretaker", "Ms. Pratibha Sunil Chandanshive", "office.jcb@iiti.ac.in", "0731-6605315"),
-      hecEntry("Hall Secretary", "Residents’ representative", "office.jcb@iiti.ac.in", "0731-6605315"),
-    ],
+    ...hallTeam({
+      email: "office.jcb@iiti.ac.in",
+      phone: "0731-6605315",
+      supervisor: { name: "Ms. Pratibha Sunil Chandanshive", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+      attendant: { name: "Hall attendant", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+      posts: {
+        "Hall Secretary": { name: "Residents’ representative", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+        "Sports Secretary": { name: "Residents’ representative", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+        "Cultural Secretary": { name: "Residents’ representative", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+        "SnT Secretary": { name: "Residents’ representative", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+        "Dining Secretary": { name: "Residents’ representative", email: "office.jcb@iiti.ac.in", phone: "0731-6605315" },
+      },
+    }),
     notices: [
       {
         date: "15 Aug 2026",

@@ -7,6 +7,28 @@ import Photo from "../components/Photo";
 import { getHostelById, hostels } from "../data/hostels";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 
+function ContactCard({ role, name, email, phone }) {
+  const dial = phone.split("ext")[0].replace(/[^\d+]/g, "");
+
+  return (
+    <li className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-wider text-iiti-gold-ink">{role}</p>
+      <p className="mt-1 flex items-start gap-2 font-serif text-lg text-iiti-navy">
+        <UserRound className="mt-1 h-4 w-4 shrink-0 text-iiti-royal" aria-hidden="true" />
+        {name}
+      </p>
+      <a className="mt-3 flex items-center gap-2 break-all text-sm hover:text-iiti-royal" href={`mailto:${email}`}>
+        <Mail className="h-4 w-4 shrink-0 text-iiti-royal" aria-hidden="true" />
+        {email}
+      </a>
+      <a className="mt-1 flex items-center gap-2 text-sm hover:text-iiti-royal" href={`tel:${dial}`}>
+        <Phone className="h-4 w-4 shrink-0 text-iiti-royal" aria-hidden="true" />
+        {phone}
+      </a>
+    </li>
+  );
+}
+
 export default function HostelDetail() {
   const { hostelId } = useParams();
   const hostel = getHostelById(hostelId);
@@ -52,7 +74,9 @@ export default function HostelDetail() {
         <div className="mx-auto flex max-w-6xl flex-wrap gap-2 px-4 py-3 text-sm font-semibold">
           {[
             ["#about", "About"],
-            ["#hec", "Committee"],
+            ["#warden", "Warden"],
+            ["#horc", "HORC"],
+            ["#desk", "Supervisor"],
             ["#facilities", "Facilities"],
             ["#notices", "Notices"],
             ["#gallery", "Gallery"],
@@ -80,28 +104,34 @@ export default function HostelDetail() {
             </p>
           </section>
 
-          <section id="hec" className="scroll-mt-36">
-            <h2 className="font-serif text-3xl text-iiti-navy">Warden & Hall Executive Committee</h2>
-            <p className="mt-3 text-sm leading-relaxed text-iiti-muted">
-              Warden and office contacts are from the public Hall of Residence directory. Where an associate warden or hall secretary is elected each year and not published, the hall office is the contact.
-            </p>
+          <section id="warden" className="scroll-mt-36">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-iiti-gold-ink">People · 1</p>
+            <h2 className="mt-2 font-serif text-3xl text-iiti-navy">Warden</h2>
             <ul className="mt-5 grid gap-4 sm:grid-cols-2">
-              {hostel.hec.map((member) => (
-                <li key={member.role} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <p className="text-xs font-bold uppercase tracking-wider text-iiti-gold-ink">{member.role}</p>
-                  <p className="mt-1 flex items-start gap-2 font-serif text-lg text-iiti-navy">
-                    <UserRound className="mt-1 h-4 w-4 shrink-0 text-iiti-royal" aria-hidden="true" />
-                    {member.name}
-                  </p>
-                  <a className="mt-3 flex items-center gap-2 break-all text-sm hover:text-iiti-royal" href={`mailto:${member.email}`}>
-                    <Mail className="h-4 w-4 shrink-0 text-iiti-royal" aria-hidden="true" />
-                    {member.email}
-                  </a>
-                  <a className="mt-1 flex items-center gap-2 text-sm hover:text-iiti-royal" href={`tel:${member.phone.replace(/[^\d+]/g, "")}`}>
-                    <Phone className="h-4 w-4 shrink-0 text-iiti-royal" aria-hidden="true" />
-                    {member.phone}
-                  </a>
-                </li>
+              <ContactCard role="Warden" {...hostel.warden} />
+              {hostel.associateWarden && <ContactCard role="Associate Warden" {...hostel.associateWarden} />}
+            </ul>
+          </section>
+
+          <section id="horc" className="scroll-mt-36">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-iiti-gold-ink">People · 2</p>
+            <h2 className="mt-2 font-serif text-3xl text-iiti-navy">HORC</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-iiti-muted">
+              Hall Secretary, Sports Secretary, Cultural Secretary, SnT Secretary, and Dining Secretary. These posts are elected each year. Until a name is entered for this session, the card uses the hall office.
+            </p>
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {hostel.horc.map((member) => (
+                <ContactCard key={member.role} {...member} />
+              ))}
+            </ul>
+          </section>
+
+          <section id="desk" className="scroll-mt-36">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-iiti-gold-ink">People · 3</p>
+            <h2 className="mt-2 font-serif text-3xl text-iiti-navy">Supervisor & Attendant</h2>
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+              {hostel.desk.map((member) => (
+                <ContactCard key={member.role} {...member} />
               ))}
             </ul>
           </section>
@@ -114,7 +144,7 @@ export default function HostelDetail() {
           </section>
 
           <section id="notices" className="scroll-mt-36">
-            <h2 className="font-serif text-3xl text-iiti-navy">Notice board & events</h2>
+            <h2 className="font-serif text-3xl text-iiti-navy">Notice board</h2>
             <div className="mt-5 grid gap-4 lg:grid-cols-2">
               <div>
                 <h3 className="text-sm font-bold uppercase tracking-wider text-iiti-royal">Notices</h3>

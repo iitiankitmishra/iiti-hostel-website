@@ -75,8 +75,8 @@ export const footerQuickLinks = [
 export const keyContacts = {
   gs: {
     label: "General Secretary (Hostels)",
-    phone: "0731-6603468",
-    email: "hostel@iiti.ac.in",
+    phone: "+91 95985 53276",
+    email: "gs.hostel@iiti.ac.in",
   },
   studentAffairs: {
     label: "Student Affairs Office",

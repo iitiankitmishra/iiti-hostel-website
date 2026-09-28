@@ -77,8 +77,8 @@ export const photos = {
 };
 
 export const heroSlides = [
-  photos.columns,
-  photos.campus,
-  photos.walkway,
-  photos.modern,
+  { src: "/campus-1.jpg", alt: "IIT Indore lawns" },
+  { src: "/campus-2.jpg", alt: "Hostel block" },
+  { src: "/campus-3.jpg", alt: "Campus walkway" },
+  { src: "/campus-4.jpg", alt: "Academic complex" },
 ];

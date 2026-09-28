@@ -59,7 +59,7 @@ export default function Home() {
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-iiti-gold">IIT Indore · Simrol campus</p>
           <h1 className="mt-3 max-w-3xl font-serif text-4xl leading-tight sm:text-6xl">Halls of Residence</h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg">
-            A fully residential institute. Students of every programme live on campus, in halls that run from the Chief Warden’s office down to a warden and a caretaker in each block.
+            A fully residential institute. Students of every programme live on campus, in halls that run from the Chief Warden’s office down to a warden and a supervisor along with hostel attendent in each block.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
@@ -143,9 +143,10 @@ export default function Home() {
                 <a className="block hover:text-iiti-gold" href="tel:07316603346">0731-6603346</a>
               </li>
               <li>
-                <span className="block font-semibold text-iiti-gold">Hall office</span>
-                <a className="mt-1 block break-all hover:text-iiti-gold" href="mailto:hostel@iiti.ac.in">hostel@iiti.ac.in</a>
-                <a className="block hover:text-iiti-gold" href="tel:07316603468">0731-6603468</a>
+                <span className="block font-semibold text-iiti-gold">General Secretary (Hostels)</span>
+                <span className="mt-1 block">Mr. Badal Singh</span>
+                <a className="mt-1 block break-all hover:text-iiti-gold" href="mailto:gs.hostel@iiti.ac.in">gs.hostel@iiti.ac.in</a>
+                <a className="block hover:text-iiti-gold" href="tel:07316603468">+91 95985 53276</a>
               </li>
               <li>
                 <span className="block font-semibold text-iiti-gold">Around each room</span>
