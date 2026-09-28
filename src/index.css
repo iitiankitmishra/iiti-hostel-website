@@ -1,3 +1,87 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
+
+  --color-iiti-navy: #0f2a4a;
+  --color-iiti-royal: #003366;
+  --color-iiti-gold: #d4af37;
+  --color-iiti-gold-ink: #8a6a1f;
+  --color-iiti-sky: #f8fafc;
+  --color-iiti-mist: #e6edf5;
+  --color-iiti-ink: #1c2b3a;
+  --color-iiti-muted: #5c6b7a;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-iiti-sky font-sans text-iiti-ink antialiased;
+  }
+
+  ::selection {
+    background: #d4af37;
+    color: #0f2a4a;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 48s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 80;
+  border-radius: 0.5rem;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  color: #0f2a4a;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  .print-sheet {
+    display: block !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
